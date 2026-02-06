@@ -1,52 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.2</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
-    <groupId>com.eaglesoft.sonar</groupId>
-    <artifactId>SonarQube-Java-Custom-Rule</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>SonarQube-Java-Custom-Rule</name>
-    <description>SonarQube-Java-Custom-Rule</description>
-    <url/>
-    <licenses>
-        <license/>
-    </licenses>
-    <developers>
-        <developer/>
-    </developers>
-    <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
-    </scm>
+
+    <groupId>com.eaglesoft.sonarqube</groupId>
+    <artifactId>sonarqube-java-rules</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>sonar-plugin</packaging>
+
     <properties>
-        <java.version>17</java.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- SonarQube compatibility -->
+        <sonar.apiVersion>13.3.0.3209</sonar.apiVersion>
+        <sonar.javaPluginVersion>8.20.0.40630</sonar.javaPluginVersion>
+        <sonar.sources>src/main/java</sonar.sources>
     </properties>
+
     <dependencies>
+        <!-- SonarQube Plugin API -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
+            <groupId>org.sonarsource.api.plugin</groupId>
+            <artifactId>sonar-plugin-api</artifactId>
+            <version>${sonar.apiVersion}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
+            <groupId>org.sonarsource.java</groupId>
+            <artifactId>java-frontend</artifactId>
+            <version>${sonar.javaPluginVersion}</version>
         </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>org.sonarsource.java</groupId>-->
+<!--            <artifactId>java-checks-testkit</artifactId>-->
+<!--            <version>8.20.0.40630</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
+                <artifactId>sonar-packaging-maven-plugin</artifactId>
+                <version>1.23.0.740</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <pluginKey>custom-java-rules</pluginKey>
+                    <pluginName>Custom Java Rules</pluginName>
+                    <pluginClass>com.eaglesoft.sonarqube.CustomRulesPlugin</pluginClass>
+                    <pluginDescription>
+                        Custom Java static analysis rules for improving code quality,
+                        security, and maintainability in enterprise applications.
+                    </pluginDescription>
+                    <sonarLintSupported>true</sonarLintSupported>
+                    <skipDependenciesPackaging>true</skipDependenciesPackaging>
+                    <pluginApiMinVersion>${sonar.apiVersion}</pluginApiMinVersion>
+                    <requirePlugins>java:${sonar.javaPluginVersion}</requirePlugins>
+                    <requiredForLanguages>java</requiredForLanguages>
+                </configuration>
             </plugin>
         </plugins>
     </build>
