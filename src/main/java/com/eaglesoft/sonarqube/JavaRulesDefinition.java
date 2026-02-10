@@ -152,41 +152,6 @@ public class JavaRulesDefinition implements RulesDefinition {
                 .setSeverity(Severity.MAJOR)
                 .setStatus(RuleStatus.READY)
                 .setTags("sql", "portability", "maintainability");
-
-        repo.createRule("noconcatquerycheckrule")
-                .setName("String concatenation should not be used to build queries")
-                .setHtmlDescription(
-                        "<p>Building queries with String concatenation is a security risk that leads to <strong>SQL Injection</strong>. " +
-                                "Additionally, it prevents the database from reusing execution plans because each unique string is treated as a new query.</p>" +
-                                "<p>Always use <strong>named parameters</strong> or <strong>positional parameters</strong> to safely inject dynamic values.</p>" +
-                                "<h3>Noncompliant Code Example</h3>" +
-                                "<pre>String queryStr = \"SELECT u FROM User u WHERE u.name = '\" + userName + \"'\";\n" +
-                                "Query query = entityManager.createQuery(queryStr);</pre>" +
-                                "<h3>Compliant Solution</h3>" +
-                                "<pre>TypedQuery&lt;User&gt; query = entityManager.createQuery(\"SELECT u FROM User u WHERE u.name = :name\", User.class);\n" +
-                                "query.setParameter(\"name\", userName);</pre>"
-                )
-                .setSeverity(Severity.BLOCKER) // Security risks usually warrant a higher severity
-                .setStatus(RuleStatus.READY)
-                .setTags("security", "sql-injection", "performance");
-
-        repo.createRule("no-eager-fetch-collections")
-                .setName("Collections should use FetchType.LAZY")
-                .setHtmlDescription(
-                        "<p>Using <code>FetchType.EAGER</code> on collection relationships (<code>@OneToMany</code>, <code>@ManyToMany</code>) " +
-                                "causes the persistence provider to load the entire collection immediately. This often leads to the <strong>N+1 Select problem</strong>, " +
-                                "resulting in significant performance degradation.</p>" +
-                                "<p>Prefer using <code>FetchType.LAZY</code> and fetching collections explicitly when needed using <strong>JOIN FETCH</strong> in JPQL or entity graphs.</p>" +
-                                "<h3>Noncompliant Code Example</h3>" +
-                                "<pre>@OneToMany(fetch = FetchType.EAGER)\n" +
-                                "private List&lt;Order&gt; orders;</pre>" +
-                                "<h3>Compliant Solution</h3>" +
-                                "<pre>@OneToMany(fetch = FetchType.LAZY)\n" +
-                                "private List&lt;Order&gt; orders;</pre>"
-                )
-                .setSeverity(Severity.CRITICAL)
-                .setStatus(RuleStatus.READY)
-                .setTags("performance", "jpa", "maintainability");
         repo.done();
     }
 }
