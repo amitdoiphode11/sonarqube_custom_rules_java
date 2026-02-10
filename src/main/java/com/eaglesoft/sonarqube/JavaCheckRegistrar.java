@@ -1,7 +1,9 @@
 package com.eaglesoft.sonarqube;
 
+import com.eaglesoft.sonarqube.rules.concat.NoQueryConcatRule;
 import com.eaglesoft.sonarqube.rules.*;
 import com.eaglesoft.sonarqube.rules.jpa.JpaBestPracticesCheckRule;
+import com.eaglesoft.sonarqube.rules.lazy.NoEagerFetchCollectionRule;
 import com.eaglesoft.sonarqube.rules.stream.PreferStreamApiRule1;
 import com.eaglesoft.sonarqube.rules.tuple.AvoidConfigurableImportRule;
 import com.eaglesoft.sonarqube.rules.tuple.AvoidJpaTupleRule;
@@ -35,7 +37,9 @@ public class JavaCheckRegistrar implements CheckRegistrar {
                 AvoidConfigurableImportRule.class,
                 AvoidJpaTupleUsageRule.class,
                 PreferStreamApiRule1.class,
-                JpaBestPracticesCheckRule.class
+                JpaBestPracticesCheckRule.class,
+                NoQueryConcatRule.class,
+                NoEagerFetchCollectionRule.class
         );
     }
 
