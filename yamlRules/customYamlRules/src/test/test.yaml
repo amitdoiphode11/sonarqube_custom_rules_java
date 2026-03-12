@@ -1,0 +1,28 @@
+
+
+metadata:
+  name: "Correct Versioning"
+  # SHOULD PASS: Standard SemVer
+  ruleVersion: 1.0.4
+
+  # SHOULD PASS: Quotes are handled by the regex
+  ruleVersion1: "2.1.0"
+  ruleVersion2: '0.9.15'
+
+---
+
+invalid_examples:
+  # SHOULD FAIL: Missing patch version
+  ruleVersion3: 1.0
+
+  # SHOULD FAIL: Non-numeric characters
+  ruleVersion4: 1.0.4-beta
+
+  # SHOULD FAIL: Incorrect prefix or capitalization
+  RuleVersion5: 1.0.4
+
+  # SHOULD FAIL: Empty or just text
+  ruleVersion6: "latest"
+
+  # SHOULD FAIL: Just a major version
+  ruleVersion7: 2
